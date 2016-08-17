@@ -38,15 +38,64 @@ public class MyApp {
 
         return new InitializingBean() {
             public void afterPropertiesSet() throws Exception {
-
-                Group group = identityService.newGroup("user");
-                group.setName("users");
-                group.setType("security-role");
-                identityService.saveGroup(group);
-
+                //建组
+                Group agent = identityService.newGroup("agent");
+                agent.setName("代理商户");
+                agent.setType("security-role");
+                identityService.saveGroup(agent);
+                
+                Group directSale = identityService.newGroup("directSale");
+                directSale.setName("直营商户");
+                directSale.setType("security-role");
+                identityService.saveGroup(directSale);
+                
+                Group platExecutive = identityService.newGroup("platExecutive");
+                platExecutive.setName("平台运营");
+                platExecutive.setType("security-role");
+                identityService.saveGroup(platExecutive);
+                
+                Group customer = identityService.newGroup("customer");
+                customer.setName("客户");
+                customer.setType("security-role");
+                identityService.saveGroup(customer);
+                //建用户
                 User admin = identityService.newUser("admin");
                 admin.setPassword("admin");
+                admin.setFirstName("平台运营");
                 identityService.saveUser(admin);
+
+                User agentBelong = identityService.newUser("agent1");
+                agentBelong.setPassword("123");
+                agentBelong.setFirstName("代理1-推广者");
+                identityService.saveUser(agentBelong);
+
+                User anotherAgent = identityService.newUser("agent2");
+                anotherAgent.setPassword("123");
+                anotherAgent.setFirstName("代理2");
+                identityService.saveUser(anotherAgent);
+
+                User directAgent = identityService.newUser("agent3");
+                directAgent.setPassword("123");
+                directAgent.setFirstName("直营代理");
+                identityService.saveUser(directAgent);
+
+                User c1 = identityService.newUser("customer1");
+                c1.setPassword("123");
+                c1.setFirstName("客户1");
+                identityService.saveUser(c1);
+
+                User c2 = identityService.newUser("customer2");
+                c2.setPassword("123");
+                c2.setFirstName("客户2");
+                identityService.saveUser(c2);
+                //绑定用户组
+                identityService.createMembership(admin.getId(),platExecutive.getId());//运营人员绑定
+                identityService.createMembership(agentBelong.getId(),agent.getId());//代理商户绑定
+                identityService.createMembership(anotherAgent.getId(),agent.getId());//代理商户绑定
+                identityService.createMembership(directAgent.getId(),directSale.getId());//直营商户绑定
+                identityService.createMembership(c1.getId(),customer.getId());//普通用户绑定
+                identityService.createMembership(c2.getId(),customer.getId());//普通用户绑定
+
 
             }
         };
